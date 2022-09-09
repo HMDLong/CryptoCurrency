@@ -23,6 +23,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                         }
                     }
                 })
+                isUserInputEnabled = false
             }
 
             bottomNavbar.setOnItemSelectedListener { menuItem ->

@@ -1,6 +1,6 @@
 package com.hmdlong14.cryptocurrency.data.repository.sources.remote
 
-import com.hmdlong14.cryptocurrency.data.repository.sources.CoinRepoCallback
+import com.hmdlong14.cryptocurrency.data.repository.StateKey
 import com.hmdlong14.cryptocurrency.data.repository.sources.CoinSource
 import com.hmdlong14.cryptocurrency.data.repository.sources.remote.fetchJson.GetJsonFromApi
 
@@ -11,15 +11,23 @@ class RemoteCoinSource : CoinSource.Remote {
         currentOffset = offset
     }
 
-    override fun getCoinsData(callback: CoinRepoCallback) {
-        GetJsonFromApi().getCoinsFromApi(currentOffset, this::setOffset, callback)
+    override fun getMoreCoinsData(state: Map<StateKey, Any>, callback: CoinResultCallback) {
+        GetJsonFromApi().getMoreCoinsFromApi(state, currentOffset, this::setOffset, callback)
     }
 
-    override fun getCoinDetail(uuid : String, callback: CoinRepoCallback) {
+    override fun getCoinsData(state: Map<StateKey, Any>, callback: CoinResultCallback){
+        GetJsonFromApi().getCoinsFromApi(state, callback)
+    }
+
+    override fun getCoinDetail(uuid : String, callback: CoinResultCallback) {
         GetJsonFromApi().getCoinDetailFromApi(uuid, callback)
     }
 
-    override fun searchCoins(queryText: String, callback: CoinRepoCallback) {
-        GetJsonFromApi().searchCoins(queryText, callback)
+    override fun searchCoins(state: Map<StateKey, Any>, callback: CoinResultCallback) {
+        GetJsonFromApi().searchCoins(state, callback)
+    }
+
+    override fun getLocalCoinsData(coinsId: List<String>, callback: CoinResultCallback) {
+        GetJsonFromApi().getCoinsById(coinsId, callback)
     }
 }

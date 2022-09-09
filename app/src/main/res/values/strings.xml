@@ -6,4 +6,6 @@
     <string name="coins_tab_title">Cryptos</string>
     <string name="convert_tab_title">Converter</string>
     <string name="holding_tab_title">Holdings</string>
+
+    <string name="coin_search_hint">Search coin by name, symbol</string>
 </resources>

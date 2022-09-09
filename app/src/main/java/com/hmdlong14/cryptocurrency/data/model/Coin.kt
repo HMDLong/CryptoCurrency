@@ -11,8 +11,10 @@ class Coin {
     var name : String = ""
     var color: String = ""
     var iconUrl: String = ""
-    var marketCap: Long = 0L
-    var price: Double = 0.0
+    var marketCap: Long? = 0
+    var price: Double? = 0.0
+    var change : Double? = 0.0
+    var volume24h: Long? = 0
     var tier: Int = 0
     var rank: Int = 0
     var description = ""
@@ -25,8 +27,34 @@ class Coin {
             name = jsonObject.getString(CoinEntry.NAME)
             color = jsonObject.getString(CoinEntry.COLOR)
             iconUrl = jsonObject.getString(CoinEntry.ICON)
-            marketCap = jsonObject.getLong(CoinEntry.MARKET_CAP)
-            price = jsonObject.getDouble(CoinEntry.PRICE)
+            marketCap = run {
+                try {
+                    jsonObject.getString(CoinEntry.MARKET_CAP).toLong()
+                } catch (e : NumberFormatException) {
+                    null
+                }
+            }
+            price = run {
+                try {
+                    jsonObject.getString(CoinEntry.PRICE).toDouble()
+                } catch (e : NumberFormatException) {
+                    null
+                }
+            }
+            volume24h = run {
+                try {
+                    jsonObject.getString(CoinEntry.VOLUME_24H).toLong()
+                } catch (e : NumberFormatException) {
+                    null
+                }
+            }
+            change = run {
+                try {
+                    jsonObject.getString(CoinEntry.CHANGE).toDouble()
+                } catch (e : NumberFormatException) {
+                    null
+                }
+            }
             tier = jsonObject.getInt(CoinEntry.TIER)
             rank = jsonObject.getInt(CoinEntry.RANK)
         }
@@ -59,6 +87,8 @@ object CoinEntry {
     const val ICON = "iconUrl"
     const val MARKET_CAP = "marketCap"
     const val PRICE = "price"
+    const val CHANGE = "change"
+    const val VOLUME_24H = "24hVolume"
     const val TIER = "tier"
     const val RANK = "rank"
     const val DESCRIPTION = "description"
