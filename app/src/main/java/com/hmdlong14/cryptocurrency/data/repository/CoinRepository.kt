@@ -1,6 +1,7 @@
 package com.hmdlong14.cryptocurrency.data.repository
 
 import android.content.Context
+import com.hmdlong14.cryptocurrency.data.model.Coin
 import com.hmdlong14.cryptocurrency.data.repository.sources.remote.CoinResultCallback
 import com.hmdlong14.cryptocurrency.data.repository.sources.CoinSource
 import com.hmdlong14.cryptocurrency.data.repository.sources.local.LocalCoinCallback
@@ -29,11 +30,11 @@ class CoinRepository private constructor(
     /**
      * Remote source
      */
-    override fun getCoinsData(state: Map<StateKey, Any>, callback : CoinResultCallback) {
+    override fun getCoinsData(state: Map<StateKey, Any>?, callback : CoinResultCallback) {
         remote.getCoinsData(state, callback)
     }
 
-    override fun getMoreCoinsData(state: Map<StateKey, Any>, callback: CoinResultCallback) {
+    override fun getMoreCoinsData(state: Map<StateKey, Any>?, callback: CoinResultCallback) {
         remote.getMoreCoinsData(state, callback)
     }
 
@@ -41,12 +42,16 @@ class CoinRepository private constructor(
         remote.getCoinDetail(uuid, callback)
     }
 
-    override fun searchCoins(state: Map<StateKey, Any>, callback: CoinResultCallback) {
+    override fun searchCoins(state: Map<StateKey, Any>?, callback: CoinResultCallback) {
         remote.searchCoins(state, callback)
     }
 
     override fun getLocalCoinsData(coinsId: List<String>, callback: CoinResultCallback) {
         remote.getLocalCoinsData(coinsId, callback)
+    }
+
+    override fun getCacheCoin(callback: CoinResultCallback){
+        remote.getCacheCoin(callback)
     }
 
     companion object {

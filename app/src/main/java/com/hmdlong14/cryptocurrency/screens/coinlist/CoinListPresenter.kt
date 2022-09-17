@@ -37,15 +37,15 @@ class CoinListPresenter(private val repository: CoinRepository) : ViewCoinsContr
         })
     }
 
-    override fun searchCoins(state : Map<StateKey, Any>) {
+    override fun searchCoins(state : Map<StateKey, Any>?) {
         resultCallback?.let { repository.searchCoins(state, it) }
     }
 
-    override fun getCoins(state : Map<StateKey, Any>) {
+    override fun getCoins(state: Map<StateKey, Any>?) {
         resultCallback?.let { repository.getCoinsData(state, it) }
     }
 
-    override fun getMoreCoins(state : Map<StateKey, Any>) {
+    override fun getMoreCoins(state: Map<StateKey, Any>?) {
         resultCallback?.let { repository.getMoreCoinsData(state, it) }
     }
 }

@@ -3,6 +3,7 @@ package com.hmdlong14.cryptocurrency.data.repository.sources.remote.fetchJson
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
+import com.hmdlong14.cryptocurrency.data.model.Coin
 import com.hmdlong14.cryptocurrency.data.repository.StateKey
 import com.hmdlong14.cryptocurrency.data.repository.sources.remote.CoinResultCallback
 import com.hmdlong14.cryptocurrency.data.repository.sources.remote.fetchJson.parser.CoinDetailParser
@@ -22,51 +23,71 @@ import java.net.URL
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 
+typealias CacheUpdate = (List<Coin>) -> Unit
+
 class GetJsonFromApi {
     private var mExecutor = Executors.newSingleThreadExecutor()
     private var mHandler = Handler(Looper.getMainLooper())
 
-    fun getMoreCoinsFromApi(state: Map<StateKey, Any>, offset: Int, setOffsetHook: (Int) -> Unit, callback: CoinResultCallback){
+    fun getMoreCoinsFromApi(
+        state: Map<StateKey, Any>?,
+        offset: Int,
+        setOffsetHook: (Int) -> Unit,
+        callback: CoinResultCallback,
+        updateCache: CacheUpdate? = null,
+    ){
         val uri = Uri.parse(BASE_URI + COINS_RESOURCE).buildUpon()
             .appendQueryParameter(QUERY_LIMIT, QUERY_LIMIT_VALUE.toString())
             .appendQueryParameter(OFFSET, offset.toString())
-            .appendQueryParameter(ORDER_BY, getCategory(state[StateKey.CURR_CATEGORY] as Int))
             .apply {
-                val query = state[StateKey.QUERY_TEXT].toString()
-                if(query.isNotEmpty()){
-                    appendQueryParameter(SEARCH, query)
+                state?.let {
+                    appendQueryParameter(ORDER_BY, getCategory(it[StateKey.CURR_CATEGORY] as Int))
+                    val query = it[StateKey.QUERY_TEXT].toString()
+                    if(query.isNotEmpty()){
+                        appendQueryParameter(SEARCH, query)
+                    }
                 }
             }
             .build()
-        getJsonFromApi(uri.toString(), CoinsParser(), callback)
+        getJsonFromApi(uri.toString(), CoinsParser(), callback, updateCache)
         setOffsetHook(offset + QUERY_LIMIT_VALUE)
     }
 
-    fun getCoinsFromApi(state: Map<StateKey, Any>, callback: CoinResultCallback){
+    fun getCoinsFromApi(
+        state: Map<StateKey, Any>?,
+        callback: CoinResultCallback,
+        updateCache: CacheUpdate? = null
+    ){
         val uri = Uri.parse(BASE_URI + COINS_RESOURCE).buildUpon()
             .appendQueryParameter(QUERY_LIMIT, QUERY_LIMIT_VALUE.toString())
-            .appendQueryParameter(ORDER_BY, getCategory(state[StateKey.CURR_CATEGORY] as Int))
             .apply {
-                val query = state[StateKey.QUERY_TEXT].toString()
-                if(query.isNotEmpty()){
-                    appendQueryParameter(SEARCH, query)
+                state?.let {
+                    appendQueryParameter(ORDER_BY, getCategory(it[StateKey.CURR_CATEGORY] as Int))
+                    val query = it[StateKey.QUERY_TEXT].toString()
+                    if(query.isNotEmpty()){
+                        appendQueryParameter(SEARCH, query)
+                    }
                 }
             }
             .build()
-        getJsonFromApi(uri.toString(), CoinsParser(), callback)
+        getJsonFromApi(uri.toString(), CoinsParser(), callback, updateCache)
     }
 
     fun getCoinDetailFromApi(uuid: String, callback: CoinResultCallback){
         val uri = Uri.parse(BASE_URI + COIN_DETAIL_RESOURCE.replace(":uuid", uuid))
-        getJsonFromApi(uri.toString(), CoinDetailParser(), callback)
+        getJsonFromApi(uri.toString(), CoinDetailParser(), callback, null)
     }
 
-    fun searchCoins(state: Map<StateKey, Any>, callback: CoinResultCallback){
+    fun searchCoins(state: Map<StateKey, Any>?, callback: CoinResultCallback){
         val uri = Uri.parse(BASE_URI + COINS_RESOURCE).buildUpon()
             .appendQueryParameter(QUERY_LIMIT, QUERY_LIMIT_VALUE.toString())
-            .appendQueryParameter(SEARCH, state[StateKey.QUERY_TEXT].toString())
+            .apply {
+                state?.let {
+                    appendQueryParameter(SEARCH, it[StateKey.QUERY_TEXT].toString())
+                }
+            }
             .build()
-        getJsonFromApi(uri.toString(), CoinsParser(), callback)
+        getJsonFromApi(uri.toString(), CoinsParser(), callback, null)
     }
 
     fun getCoinsById(coinsId: List<String>, callback: CoinResultCallback){
@@ -107,7 +128,7 @@ class GetJsonFromApi {
             else -> ORD_MARKET_CAP
         }
 
-    private fun getJsonFromApi(url: String, parser: Parser, callback: CoinResultCallback){
+    private fun getJsonFromApi(url: String, parser: Parser, callback: CoinResultCallback, updateCache: CacheUpdate?){
         mExecutor.execute {
             val connection =
                 (URL(url).openConnection() as HttpURLConnection).apply {
@@ -125,6 +146,7 @@ class GetJsonFromApi {
                 mHandler.post {
                     try {
                         callback.onSuccess(res)
+                        updateCache?.invoke(res)
                     } catch(e : Exception){
                         callback.onFailed(e)
                     }

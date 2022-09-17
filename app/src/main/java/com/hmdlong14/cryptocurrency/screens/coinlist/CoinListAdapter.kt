@@ -10,6 +10,7 @@ import com.hmdlong14.cryptocurrency.R
 import com.hmdlong14.cryptocurrency.data.model.Coin
 import com.hmdlong14.cryptocurrency.data.repository.sources.local.favorites.FavoritesSource
 import com.hmdlong14.cryptocurrency.databinding.CoinItemBinding
+import com.hmdlong14.cryptocurrency.databinding.CoinItemCardBinding
 import com.hmdlong14.cryptocurrency.databinding.LoadingItemBinding
 import com.hmdlong14.cryptocurrency.utils.extensions.loadImage
 import com.hmdlong14.cryptocurrency.utils.extensions.round
@@ -46,7 +47,7 @@ class CoinListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when(viewType){
             HolderType.ITEM -> {
-                val binding = CoinItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                val binding = CoinItemCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 CoinHolder(binding.root, binding)
             }
             HolderType.LOADING -> {
@@ -54,7 +55,7 @@ class CoinListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 LoadingHolder(binding.root, binding)
             }
             else -> {
-                val binding = CoinItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                val binding = CoinItemCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 CoinHolder(binding.root, binding)
             }
         }
@@ -165,7 +166,7 @@ class CoinListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         notifyItemRemoved(coinList.size - 1)
     }
 
-    inner class CoinHolder(itemView : View, val binding : CoinItemBinding) : RecyclerView.ViewHolder(itemView)
+    inner class CoinHolder(itemView : View, val binding : CoinItemCardBinding) : RecyclerView.ViewHolder(itemView)
 
     inner class LoadingHolder(itemView: View, val binding: LoadingItemBinding) : RecyclerView.ViewHolder(itemView)
 }

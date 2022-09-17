@@ -12,10 +12,11 @@ interface CoinSource {
     }
 
     interface Remote {
-        fun getCoinsData(state : Map<StateKey, Any>, callback: CoinResultCallback)
-        fun getMoreCoinsData(state : Map<StateKey, Any>, callback: CoinResultCallback)
+        fun getCoinsData(state : Map<StateKey, Any>? = null, callback: CoinResultCallback)
+        fun getMoreCoinsData(state : Map<StateKey, Any>? = null, callback: CoinResultCallback)
         fun getCoinDetail(uuid : String, callback: CoinResultCallback)
-        fun searchCoins(state : Map<StateKey, Any>, callback: CoinResultCallback)
+        fun searchCoins(state : Map<StateKey, Any>? = null, callback: CoinResultCallback)
         fun getLocalCoinsData(coinsId : List<String>, callback: CoinResultCallback)
+        fun getCacheCoin(callback: CoinResultCallback)
     }
 }

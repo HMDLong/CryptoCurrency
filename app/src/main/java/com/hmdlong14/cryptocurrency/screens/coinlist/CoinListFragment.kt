@@ -3,7 +3,6 @@ package com.hmdlong14.cryptocurrency.screens.coinlist
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hmdlong14.cryptocurrency.data.model.Coin
@@ -60,7 +59,6 @@ class CoinListFragment :
             coinList.apply {
                 adapter = coinListAdapter
                 layoutManager = LinearLayoutManager(this@CoinListFragment.context, RecyclerView.VERTICAL, false)
-                addItemDecoration(DividerItemDecoration(this@CoinListFragment.context, RecyclerView.VERTICAL))
                 addOnScrollListener(object : PaginationScrollListener() {
                     override fun loadMoreData() {
                         if(state[StateKey.CURR_CATEGORY] == FAV_POS)

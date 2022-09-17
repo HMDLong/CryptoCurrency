@@ -13,9 +13,9 @@ interface ViewCoinsContract {
     }
 
     interface Presenter {
-        fun getCoins(state : Map<StateKey, Any>)
+        fun getCoins(state : Map<StateKey, Any>? = null)
         fun getFavoriteCoins(context: Context)
-        fun searchCoins(state : Map<StateKey, Any>)
-        fun getMoreCoins(state : Map<StateKey, Any>)
+        fun searchCoins(state : Map<StateKey, Any>? = null)
+        fun getMoreCoins(state : Map<StateKey, Any>? = null)
     }
 }

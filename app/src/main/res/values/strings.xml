@@ -8,4 +8,9 @@
     <string name="holding_tab_title">Holdings</string>
 
     <string name="coin_search_hint">Search coin by name, symbol</string>
+
+    <string name="convert_from">From</string>
+    <string name="convert_to">To</string>
+
+    <string name="default_convert_result">0.0</string>
 </resources>
