@@ -3,6 +3,8 @@ package com.hmdlong14.cryptocurrency.data.repository.sources.remote
 import com.hmdlong14.cryptocurrency.data.model.Coin
 import com.hmdlong14.cryptocurrency.data.repository.StateKey
 import com.hmdlong14.cryptocurrency.data.repository.sources.CoinSource
+import com.hmdlong14.cryptocurrency.data.repository.sources.remote.callback.CoinResultCallback
+import com.hmdlong14.cryptocurrency.data.repository.sources.remote.callback.HistoryResultCallback
 import com.hmdlong14.cryptocurrency.data.repository.sources.remote.fetchJson.GetJsonFromApi
 
 class RemoteCoinSource : CoinSource.Remote {
@@ -50,5 +52,9 @@ class RemoteCoinSource : CoinSource.Remote {
         } else {
             callback.onSuccess(cache)
         }
+    }
+
+    override fun getPriceHistory(coin: Coin, callback: HistoryResultCallback) {
+        GetJsonFromApi().getCoinHistory(coin.uuid, callback)
     }
 }

@@ -1,10 +1,10 @@
-package com.hmdlong14.cryptocurrency.screens.coinlist
+package com.hmdlong14.cryptocurrency.screens.coin.coinlist
 
 import android.content.Context
 import com.hmdlong14.cryptocurrency.data.model.Coin
 import com.hmdlong14.cryptocurrency.data.repository.CoinRepository
 import com.hmdlong14.cryptocurrency.data.repository.StateKey
-import com.hmdlong14.cryptocurrency.data.repository.sources.remote.CoinResultCallback
+import com.hmdlong14.cryptocurrency.data.repository.sources.remote.callback.CoinResultCallback
 import com.hmdlong14.cryptocurrency.data.repository.sources.local.LocalCoinCallback
 
 class CoinListPresenter(private val repository: CoinRepository) : ViewCoinsContract.Presenter {
@@ -15,8 +15,8 @@ class CoinListPresenter(private val repository: CoinRepository) : ViewCoinsContr
     fun setView(view: ViewCoinsContract.View){
         mView = view
         resultCallback = object : CoinResultCallback {
-            override fun onSuccess(coins: MutableList<Coin>) {
-                mView?.onGetCoinsSuccess(coins)
+            override fun onSuccess(result: MutableList<Coin>) {
+                mView?.onGetCoinsSuccess(result)
             }
 
             override fun onFailed(exception: Exception) {

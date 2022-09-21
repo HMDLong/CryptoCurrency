@@ -1,4 +1,4 @@
-package com.hmdlong14.cryptocurrency.screens.coinlist
+package com.hmdlong14.cryptocurrency.screens.coin.coinlist
 
 import android.view.LayoutInflater
 import android.view.View

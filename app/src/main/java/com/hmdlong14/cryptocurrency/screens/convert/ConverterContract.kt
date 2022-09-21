@@ -12,7 +12,7 @@ interface ConverterContract {
     }
 
     interface View {
-        fun onSetCoinSuccess(source: Coin, target: Coin, coins: List<Coin>)
+        fun onSetCoinSuccess(source: Coin? = null, target: Coin? = null, coins: List<Coin>? = null)
         fun onSetCoinFailed(exception: Exception)
         fun onResultSuccess(result : Double)
         fun onResultFailed(exception: Exception)

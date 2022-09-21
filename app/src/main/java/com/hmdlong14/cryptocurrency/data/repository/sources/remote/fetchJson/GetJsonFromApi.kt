@@ -5,14 +5,16 @@ import android.os.Handler
 import android.os.Looper
 import com.hmdlong14.cryptocurrency.data.model.Coin
 import com.hmdlong14.cryptocurrency.data.repository.StateKey
-import com.hmdlong14.cryptocurrency.data.repository.sources.remote.CoinResultCallback
+import com.hmdlong14.cryptocurrency.data.repository.sources.remote.callback.CoinResultCallback
+import com.hmdlong14.cryptocurrency.data.repository.sources.remote.callback.HistoryResultCallback
+import com.hmdlong14.cryptocurrency.data.repository.sources.remote.callback.ResultCallback
 import com.hmdlong14.cryptocurrency.data.repository.sources.remote.fetchJson.parser.CoinDetailParser
 import com.hmdlong14.cryptocurrency.data.repository.sources.remote.fetchJson.parser.CoinsParser
 import com.hmdlong14.cryptocurrency.data.repository.sources.remote.fetchJson.parser.Parser
-import com.hmdlong14.cryptocurrency.screens.coinlist.CategoryAdapter.Companion.MARKET_CAP_POS
-import com.hmdlong14.cryptocurrency.screens.coinlist.CategoryAdapter.Companion.PRICE_POS
-import com.hmdlong14.cryptocurrency.screens.coinlist.CategoryAdapter.Companion.RANKING_POS
-import com.hmdlong14.cryptocurrency.screens.coinlist.CategoryAdapter.Companion.VOLUME_24H_POS
+import com.hmdlong14.cryptocurrency.screens.coin.coinlist.CategoryAdapter.Companion.MARKET_CAP_POS
+import com.hmdlong14.cryptocurrency.screens.coin.coinlist.CategoryAdapter.Companion.PRICE_POS
+import com.hmdlong14.cryptocurrency.screens.coin.coinlist.CategoryAdapter.Companion.RANKING_POS
+import com.hmdlong14.cryptocurrency.screens.coin.coinlist.CategoryAdapter.Companion.VOLUME_24H_POS
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.FileNotFoundException
@@ -90,6 +92,10 @@ class GetJsonFromApi {
         getJsonFromApi(uri.toString(), CoinsParser(), callback, null)
     }
 
+    fun getCoinHistory(uuid: String, callback: HistoryResultCallback){
+        val uri = Uri.parse(BASE_URI + COIN_HISTORY_RESOURCE.replace(":uuid", uuid))
+    }
+
     fun getCoinsById(coinsId: List<String>, callback: CoinResultCallback){
         try {
             val futures = coinsId.map { uuid ->
@@ -128,7 +134,7 @@ class GetJsonFromApi {
             else -> ORD_MARKET_CAP
         }
 
-    private fun getJsonFromApi(url: String, parser: Parser, callback: CoinResultCallback, updateCache: CacheUpdate?){
+    private fun getJsonFromApi(url: String, parser: Parser, callback: ResultCallback<MutableList<Coin>>, updateCache: CacheUpdate?){
         mExecutor.execute {
             val connection =
                 (URL(url).openConnection() as HttpURLConnection).apply {
@@ -174,6 +180,7 @@ class GetJsonFromApi {
         const val BASE_URI = "https://api.coinranking.com/v2"
         const val COINS_RESOURCE = "/coins"
         const val COIN_DETAIL_RESOURCE = "/coin/:uuid"
+        const val COIN_HISTORY_RESOURCE = "coin/:uuid/history"
 
         const val API_KEY = "coinrankingcffc42979ab3727a515035f5de5c7533a6e8b9789b3bc76f"
         const val API_KEY_HEADER_KEY = "x-access-token"

@@ -1,6 +1,5 @@
 package com.hmdlong14.cryptocurrency.screens.convert
 
-import android.util.Log
 import android.view.DragEvent
 import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
@@ -20,8 +19,6 @@ class ConverterFragment :
 
     private val coinPickAdapter : CoinPickAdapter by lazy { CoinPickAdapter() }
 
-    private var entered = false
-
     private val presenter = ConverterPresenter(
         CoinRepository.getInstance(
             LocalCoinSource(),
@@ -39,10 +36,13 @@ class ConverterFragment :
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             }
         }
+
         binding.sourceCoin.root.setOnDragListener { v, event ->
             when(event.action){
                 DragEvent.ACTION_DROP -> {
-                    Log.d("drop", "on source coin")
+                    (event.clipData.getItemAt(0).intent.getSerializableExtra("data") as Coin?)?.let {
+                        presenter.setSource(it)
+                    }
                 }
             }
             true
@@ -59,7 +59,7 @@ class ConverterFragment :
             try {
                 presenter.convert(it.toString().toDouble())
             } catch (e : Exception) {
-
+                binding.outputText.text = "0.0"
             }
         }
         binding.botSheet.pickList.adapter = coinPickAdapter
@@ -70,18 +70,24 @@ class ConverterFragment :
         presenter.init()
     }
 
-    override fun onSetCoinSuccess(source: Coin, target: Coin, coins: List<Coin>) {
-        binding.sourceCoin.apply {
-            coinImage.loadImage(source.iconUrl)
-            coinSymbol.text = source.symbol
+    override fun onSetCoinSuccess(source: Coin?, target: Coin?, coins: List<Coin>?) {
+        source?.apply {
+            binding.sourceCoin.apply {
+                coinImage.loadImage(source.iconUrl)
+                coinSymbol.text = source.symbol
+            }
         }
 
-        binding.targetCoin.apply {
-            coinImage.loadImage(target.iconUrl)
-            coinSymbol.text = target.symbol
+        target?.apply {
+            binding.targetCoin.apply {
+                coinImage.loadImage(target.iconUrl)
+                coinSymbol.text = target.symbol
+            }
         }
 
-        coinPickAdapter.setCoins(coins)
+        coins?.apply {
+            coinPickAdapter.setCoins(coins)
+        }
     }
 
     override fun onSetCoinFailed(exception: Exception) {

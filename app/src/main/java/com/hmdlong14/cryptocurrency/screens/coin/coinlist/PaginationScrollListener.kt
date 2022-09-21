@@ -1,4 +1,4 @@
-package com.hmdlong14.cryptocurrency.screens.coinlist
+package com.hmdlong14.cryptocurrency.screens.coin.coinlist
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView

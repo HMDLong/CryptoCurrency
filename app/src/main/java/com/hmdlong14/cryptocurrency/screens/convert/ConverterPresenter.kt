@@ -2,7 +2,7 @@ package com.hmdlong14.cryptocurrency.screens.convert
 
 import com.hmdlong14.cryptocurrency.data.model.Coin
 import com.hmdlong14.cryptocurrency.data.repository.CoinRepository
-import com.hmdlong14.cryptocurrency.data.repository.sources.remote.CoinResultCallback
+import com.hmdlong14.cryptocurrency.data.repository.sources.remote.callback.CoinResultCallback
 
 class ConverterPresenter(private val repository: CoinRepository) : ConverterContract.Presenter {
     private val converter : Converter by lazy { Converter() }
@@ -24,10 +24,12 @@ class ConverterPresenter(private val repository: CoinRepository) : ConverterCont
 
     override fun setSource(source: Coin) {
         converter.source = source
+        view?.onSetCoinSuccess(source = source)
     }
 
     override fun setTarget(target: Coin) {
         converter.target = target
+        view?.onSetCoinSuccess(target = target)
     }
 
     override fun convert(amount: Double) : Double {

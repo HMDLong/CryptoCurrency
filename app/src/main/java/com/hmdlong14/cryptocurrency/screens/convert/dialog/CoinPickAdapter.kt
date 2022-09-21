@@ -7,16 +7,13 @@ import android.graphics.Color
 import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
-import android.util.Log
+import android.content.Intent
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.hmdlong14.cryptocurrency.data.model.Coin
 import com.hmdlong14.cryptocurrency.databinding.CoinPickItemBinding
-import com.hmdlong14.cryptocurrency.databinding.FragmentConverterBinding
 import com.hmdlong14.cryptocurrency.utils.extensions.loadImage
 
 class CoinPickAdapter : RecyclerView.Adapter<CoinPickAdapter.CoinPickHolder>() {
@@ -39,7 +36,6 @@ class CoinPickAdapter : RecyclerView.Adapter<CoinPickAdapter.CoinPickHolder>() {
     }
 
     fun dropFail(){
-        Log.d("visi", "here")
         dragItem?.visibility = View.VISIBLE
     }
 
@@ -59,7 +55,7 @@ class CoinPickAdapter : RecyclerView.Adapter<CoinPickAdapter.CoinPickHolder>() {
                         ClipData(
                             "abc",
                             arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN),
-                            ClipData.Item("abc")
+                            ClipData.Item(Intent().putExtra("data", coinList[position]))
                         ),
                         View.DragShadowBuilder(it),
                         null,

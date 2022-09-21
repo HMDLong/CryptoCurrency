@@ -1,4 +1,4 @@
-package com.hmdlong14.cryptocurrency.screens.coinlist
+package com.hmdlong14.cryptocurrency.screens.coin.coinlist
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.hmdlong14.cryptocurrency.R
 import com.hmdlong14.cryptocurrency.data.model.Coin
 import com.hmdlong14.cryptocurrency.data.repository.sources.local.favorites.FavoritesSource
-import com.hmdlong14.cryptocurrency.databinding.CoinItemBinding
 import com.hmdlong14.cryptocurrency.databinding.CoinItemCardBinding
 import com.hmdlong14.cryptocurrency.databinding.LoadingItemBinding
 import com.hmdlong14.cryptocurrency.utils.extensions.loadImage
@@ -24,8 +23,13 @@ object HolderType {
     const val ITEM = 1
 }
 
+interface CoinClickListener {
+    fun onCoinClick(coin : Coin)
+}
+
 class CoinListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val coinList = mutableListOf<Coin>()
+    lateinit var callback : CoinClickListener
     var isLoading = false
 
     fun setCoins(coins : MutableList<Coin>){
@@ -99,6 +103,9 @@ class CoinListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 )
                 favoriteButton.setOnClickListener {
                     changeOnFavButtonClick(holder, coinList[position])
+                }
+                root.setOnClickListener {
+                    callback.onCoinClick(coin)
                 }
             }
         }

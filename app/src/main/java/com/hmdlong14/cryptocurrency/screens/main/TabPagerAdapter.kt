@@ -3,7 +3,7 @@ package com.hmdlong14.cryptocurrency.screens.main
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.hmdlong14.cryptocurrency.screens.coinlist.CoinListFragment
+import com.hmdlong14.cryptocurrency.screens.coin.CoinFragment
 import com.hmdlong14.cryptocurrency.screens.convert.ConverterFragment
 import com.hmdlong14.cryptocurrency.screens.holdings.HoldingFragment
 
@@ -12,10 +12,10 @@ class TabPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter
 
     override fun createFragment(position: Int): Fragment =
         when(position){
-            COINS_TAB_POS -> CoinListFragment.newInstance()
+            COINS_TAB_POS -> CoinFragment.newInstance()
             CONVERTER_TAB_POS -> ConverterFragment.newInstance()
             HOLDINGS_TAB_POS -> HoldingFragment.newInstance()
-            else -> CoinListFragment.newInstance()
+            else -> CoinFragment.newInstance()
         }
 
     companion object {

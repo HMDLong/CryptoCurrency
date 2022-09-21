@@ -4,8 +4,9 @@ import android.os.Build
 import android.text.Html
 import androidx.core.text.HtmlCompat
 import org.json.JSONObject
+import java.io.Serializable
 
-class Coin {
+class Coin : Serializable {
     var uuid : String = ""
     var symbol: String = ""
     var name : String = ""

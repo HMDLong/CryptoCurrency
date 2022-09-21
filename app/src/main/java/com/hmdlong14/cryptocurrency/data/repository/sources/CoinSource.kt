@@ -1,9 +1,11 @@
 package com.hmdlong14.cryptocurrency.data.repository.sources
 
 import android.content.Context
+import com.hmdlong14.cryptocurrency.data.model.Coin
 import com.hmdlong14.cryptocurrency.data.repository.StateKey
 import com.hmdlong14.cryptocurrency.data.repository.sources.local.LocalCoinCallback
-import com.hmdlong14.cryptocurrency.data.repository.sources.remote.CoinResultCallback
+import com.hmdlong14.cryptocurrency.data.repository.sources.remote.callback.CoinResultCallback
+import com.hmdlong14.cryptocurrency.data.repository.sources.remote.callback.HistoryResultCallback
 
 interface CoinSource {
     interface Local {
@@ -18,5 +20,6 @@ interface CoinSource {
         fun searchCoins(state : Map<StateKey, Any>? = null, callback: CoinResultCallback)
         fun getLocalCoinsData(coinsId : List<String>, callback: CoinResultCallback)
         fun getCacheCoin(callback: CoinResultCallback)
+        fun getPriceHistory(coin: Coin, callback: HistoryResultCallback)
     }
 }

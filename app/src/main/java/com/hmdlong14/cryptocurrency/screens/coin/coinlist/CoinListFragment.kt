@@ -1,4 +1,4 @@
-package com.hmdlong14.cryptocurrency.screens.coinlist
+package com.hmdlong14.cryptocurrency.screens.coin.coinlist
 
 import android.view.View
 import android.widget.Toast
@@ -11,8 +11,8 @@ import com.hmdlong14.cryptocurrency.data.repository.StateKey
 import com.hmdlong14.cryptocurrency.data.repository.sources.local.LocalCoinSource
 import com.hmdlong14.cryptocurrency.data.repository.sources.remote.RemoteCoinSource
 import com.hmdlong14.cryptocurrency.databinding.FragmentCoinListBinding
-import com.hmdlong14.cryptocurrency.screens.coinlist.CategoryAdapter.Companion.FAV_POS
-import com.hmdlong14.cryptocurrency.screens.coinlist.CategoryAdapter.Companion.RANKING_POS
+import com.hmdlong14.cryptocurrency.screens.coin.coinlist.CategoryAdapter.Companion.FAV_POS
+import com.hmdlong14.cryptocurrency.screens.coin.coinlist.CategoryAdapter.Companion.RANKING_POS
 import com.hmdlong14.cryptocurrency.utils.base.BaseFragment
 
 class CoinListFragment :
@@ -128,6 +128,8 @@ class CoinListFragment :
 
     companion object {
         @JvmStatic
-        fun newInstance() = CoinListFragment()
+        fun newInstance(coinClickListener: CoinClickListener) = CoinListFragment().also {
+            it.coinListAdapter.callback = coinClickListener
+        }
     }
 }

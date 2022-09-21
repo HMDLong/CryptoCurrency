@@ -2,9 +2,10 @@ package com.hmdlong14.cryptocurrency.data.repository
 
 import android.content.Context
 import com.hmdlong14.cryptocurrency.data.model.Coin
-import com.hmdlong14.cryptocurrency.data.repository.sources.remote.CoinResultCallback
+import com.hmdlong14.cryptocurrency.data.repository.sources.remote.callback.CoinResultCallback
 import com.hmdlong14.cryptocurrency.data.repository.sources.CoinSource
 import com.hmdlong14.cryptocurrency.data.repository.sources.local.LocalCoinCallback
+import com.hmdlong14.cryptocurrency.data.repository.sources.remote.callback.HistoryResultCallback
 
 enum class StateKey {
     QUERY_TEXT,
@@ -52,6 +53,10 @@ class CoinRepository private constructor(
 
     override fun getCacheCoin(callback: CoinResultCallback){
         remote.getCacheCoin(callback)
+    }
+
+    override fun getPriceHistory(coin: Coin, callback: HistoryResultCallback) {
+        TODO("Not yet implemented")
     }
 
     companion object {
