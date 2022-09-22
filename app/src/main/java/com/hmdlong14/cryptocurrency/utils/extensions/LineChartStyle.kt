@@ -13,12 +13,14 @@ fun LineChart.applyCustomStyle() {
 
     xAxis.apply {
         position = XAxis.XAxisPosition.BOTTOM
-        valueFormatter = CustomXAxisFormatter()
+        //valueFormatter = CustomXAxisFormatter()
+        isEnabled = false
     }
 }
 
 fun LineDataSet.applyCustomStyle() : LineDataSet {
     mode = LineDataSet.Mode.CUBIC_BEZIER
+    setDrawCircles(false)
     setDrawValues(false)
     return this
 }

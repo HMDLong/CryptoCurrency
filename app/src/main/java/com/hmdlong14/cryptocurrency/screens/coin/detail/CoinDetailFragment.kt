@@ -2,8 +2,8 @@ package com.hmdlong14.cryptocurrency.screens.coin.detail
 
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
-import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.updateLayoutParams
@@ -15,11 +15,13 @@ import com.hmdlong14.cryptocurrency.data.model.Coin
 import com.hmdlong14.cryptocurrency.data.repository.CoinRepository
 import com.hmdlong14.cryptocurrency.data.repository.sources.local.LocalCoinSource
 import com.hmdlong14.cryptocurrency.data.repository.sources.remote.RemoteCoinSource
+import com.hmdlong14.cryptocurrency.data.repository.sources.remote.fetchJson.parser.HistoryEntry
 import com.hmdlong14.cryptocurrency.databinding.FragmentCoinDetailBinding
 import com.hmdlong14.cryptocurrency.utils.base.BaseFragment
 import com.hmdlong14.cryptocurrency.utils.extensions.applyCustomStyle
 import com.hmdlong14.cryptocurrency.utils.extensions.getTriGradient
 import com.hmdlong14.cryptocurrency.utils.extensions.loadImage
+import kotlin.math.roundToInt
 
 private const val ARG_COIN = "coin"
 
@@ -70,8 +72,8 @@ class CoinDetailFragment :
             coinSymbol.text = coin.symbol
             coinDescription.text = coin.description
             txtPrice.text = activity?.resources?.getString(R.string.txt_price)?.format(coin.price)
-            txtMarketCap.text = "Market Cap $${coin.marketCap}"
-            txtVolume24.text = "Volume 24h $${coin.volume24h}"
+            txtMarketCap.text = " $${coin.marketCap}"
+            txtVolume24.text = " $${coin.volume24h}"
             arrayOf(txtLabelPrice, txtLabelDes).forEach { textView ->
                 textView.setTextColor(Color.parseColor(coin.color))
             }
@@ -92,10 +94,12 @@ class CoinDetailFragment :
         }
     }
 
-    override fun onGetHistory(history: Map<Long, Double>){
+    override fun onGetHistory(history: List<HistoryEntry<Double>>){
         val entries = arrayListOf<Entry>().apply {
-            history.forEach { (timestamp, price) ->
-                add(Entry(timestamp.toFloat(), price.toFloat()))
+            var x = 0
+            history.forEach { (_, price) ->
+                add(Entry(x.toFloat(), price.toFloat()))
+                x += 1000
             }
         }
         binding.priceChart.apply {

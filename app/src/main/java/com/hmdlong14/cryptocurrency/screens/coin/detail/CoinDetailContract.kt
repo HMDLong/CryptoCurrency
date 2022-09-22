@@ -1,12 +1,12 @@
 package com.hmdlong14.cryptocurrency.screens.coin.detail
 
 import com.hmdlong14.cryptocurrency.data.model.Coin
-import java.lang.Exception
+import com.hmdlong14.cryptocurrency.data.repository.sources.remote.fetchJson.parser.HistoryEntry
 
 interface CoinDetailContract {
     interface View {
         fun onGetDetailSuccess(coin: Coin)
-        fun onGetHistory(history: Map<Long, Double>)
+        fun onGetHistory(history: List<HistoryEntry<Double>>)
         fun onFail(exception: Exception)
     }
 

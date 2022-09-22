@@ -10,6 +10,7 @@ import com.hmdlong14.cryptocurrency.data.repository.sources.remote.callback.Hist
 import com.hmdlong14.cryptocurrency.data.repository.sources.remote.callback.ResultCallback
 import com.hmdlong14.cryptocurrency.data.repository.sources.remote.fetchJson.parser.CoinDetailParser
 import com.hmdlong14.cryptocurrency.data.repository.sources.remote.fetchJson.parser.CoinsParser
+import com.hmdlong14.cryptocurrency.data.repository.sources.remote.fetchJson.parser.HistoryParser
 import com.hmdlong14.cryptocurrency.data.repository.sources.remote.fetchJson.parser.Parser
 import com.hmdlong14.cryptocurrency.screens.coin.coinlist.CategoryAdapter.Companion.MARKET_CAP_POS
 import com.hmdlong14.cryptocurrency.screens.coin.coinlist.CategoryAdapter.Companion.PRICE_POS
@@ -94,6 +95,7 @@ class GetJsonFromApi {
 
     fun getCoinHistory(uuid: String, callback: HistoryResultCallback){
         val uri = Uri.parse(BASE_URI + COIN_HISTORY_RESOURCE.replace(":uuid", uuid))
+        getJsonFromApi(uri.toString(), HistoryParser(), callback, null)
     }
 
     fun getCoinsById(coinsId: List<String>, callback: CoinResultCallback){
@@ -134,7 +136,7 @@ class GetJsonFromApi {
             else -> ORD_MARKET_CAP
         }
 
-    private fun getJsonFromApi(url: String, parser: Parser, callback: ResultCallback<MutableList<Coin>>, updateCache: CacheUpdate?){
+    private fun <T> getJsonFromApi(url: String, parser: Parser<T>, callback: ResultCallback<T>, updateCache: CacheUpdate?){
         mExecutor.execute {
             val connection =
                 (URL(url).openConnection() as HttpURLConnection).apply {
@@ -152,7 +154,7 @@ class GetJsonFromApi {
                 mHandler.post {
                     try {
                         callback.onSuccess(res)
-                        updateCache?.invoke(res)
+                        //updateCache?.invoke(res)
                     } catch(e : Exception){
                         callback.onFailed(e)
                     }
@@ -180,7 +182,7 @@ class GetJsonFromApi {
         const val BASE_URI = "https://api.coinranking.com/v2"
         const val COINS_RESOURCE = "/coins"
         const val COIN_DETAIL_RESOURCE = "/coin/:uuid"
-        const val COIN_HISTORY_RESOURCE = "coin/:uuid/history"
+        const val COIN_HISTORY_RESOURCE = "/coin/:uuid/history"
 
         const val API_KEY = "coinrankingcffc42979ab3727a515035f5de5c7533a6e8b9789b3bc76f"
         const val API_KEY_HEADER_KEY = "x-access-token"

@@ -56,7 +56,7 @@ class CoinRepository private constructor(
     }
 
     override fun getPriceHistory(coin: Coin, callback: HistoryResultCallback) {
-        TODO("Not yet implemented")
+        remote.getPriceHistory(coin, callback)
     }
 
     companion object {

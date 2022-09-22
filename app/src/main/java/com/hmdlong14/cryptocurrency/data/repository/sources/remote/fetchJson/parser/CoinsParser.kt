@@ -3,7 +3,7 @@ package com.hmdlong14.cryptocurrency.data.repository.sources.remote.fetchJson.pa
 import com.hmdlong14.cryptocurrency.data.model.Coin
 import org.json.JSONObject
 
-class CoinsParser : Parser() {
+class CoinsParser : Parser<MutableList<Coin>>() {
     override fun parseData(jsonObject: JSONObject) : MutableList<Coin> {
         val coins = mutableListOf<Coin>()
         val coinsJSONArray = jsonObject

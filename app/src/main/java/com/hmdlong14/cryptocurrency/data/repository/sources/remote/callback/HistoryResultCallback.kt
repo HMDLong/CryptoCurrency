@@ -1,3 +1,5 @@
 package com.hmdlong14.cryptocurrency.data.repository.sources.remote.callback
 
-interface HistoryResultCallback : ResultCallback<Map<Long, Double>>
+import com.hmdlong14.cryptocurrency.data.repository.sources.remote.fetchJson.parser.HistoryEntry
+
+interface HistoryResultCallback : ResultCallback<List<HistoryEntry<Double>>>

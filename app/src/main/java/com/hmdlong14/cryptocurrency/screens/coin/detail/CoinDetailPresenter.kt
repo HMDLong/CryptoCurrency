@@ -3,6 +3,8 @@ package com.hmdlong14.cryptocurrency.screens.coin.detail
 import com.hmdlong14.cryptocurrency.data.model.Coin
 import com.hmdlong14.cryptocurrency.data.repository.CoinRepository
 import com.hmdlong14.cryptocurrency.data.repository.sources.remote.callback.CoinResultCallback
+import com.hmdlong14.cryptocurrency.data.repository.sources.remote.callback.HistoryResultCallback
+import com.hmdlong14.cryptocurrency.data.repository.sources.remote.fetchJson.parser.HistoryEntry
 import com.hmdlong14.cryptocurrency.utils.base.BasePresenter
 
 class CoinDetailPresenter(private val repository: CoinRepository)
@@ -30,6 +32,15 @@ class CoinDetailPresenter(private val repository: CoinRepository)
             }
 
             override fun onFailed(exception: Exception) {
+                _view?.onFail(exception)
+            }
+        })
+        repository.getPriceHistory(coin, object : HistoryResultCallback {
+            override fun onSuccess(result: List<HistoryEntry<Double>>) {
+                _view?.onGetHistory(result)
+            }
+
+            override fun onFailed(exception: java.lang.Exception) {
                 _view?.onFail(exception)
             }
         })
