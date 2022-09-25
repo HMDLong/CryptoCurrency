@@ -17,7 +17,7 @@
     <string name="coin_null_value">Unknown</string>
     <string name="price_unit">Bn</string>
 
-    <string name="txt_price">Price: \$?</string>
+    <string name="txt_price">Price: \$%.2f</string>
     <string name="txt_market_cap">Market Cap: \$?</string>
     <string name="txt_24h_volume">Volume 24h: \$?</string>
 </resources>

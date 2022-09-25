@@ -20,7 +20,7 @@ class CoinFragment : BaseFragment<FragmentCoinBinding>(FragmentCoinBinding::infl
                         toDetailFragment(coin)
                     }
                 }))
-            .setReorderingAllowed(true)
+            .addToBackStack(null)
             .commit()
     }
 
@@ -30,7 +30,7 @@ class CoinFragment : BaseFragment<FragmentCoinBinding>(FragmentCoinBinding::infl
                 binding.fragmentFrame.id,
                 CoinDetailFragment.newInstance(coin)
             )
-            .addToBackStack(TAG_DETAIL)
+            .addToBackStack(null)
             .commit()
     }
 

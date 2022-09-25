@@ -3,13 +3,13 @@ package com.hmdlong14.cryptocurrency.screens.coin.detail
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.updateLayoutParams
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.utils.EntryXComparator
 import com.hmdlong14.cryptocurrency.R
 import com.hmdlong14.cryptocurrency.data.model.Coin
 import com.hmdlong14.cryptocurrency.data.repository.CoinRepository
@@ -21,7 +21,8 @@ import com.hmdlong14.cryptocurrency.utils.base.BaseFragment
 import com.hmdlong14.cryptocurrency.utils.extensions.applyCustomStyle
 import com.hmdlong14.cryptocurrency.utils.extensions.getTriGradient
 import com.hmdlong14.cryptocurrency.utils.extensions.loadImage
-import kotlin.math.roundToInt
+import java.text.NumberFormat
+import java.util.*
 
 private const val ARG_COIN = "coin"
 
@@ -57,6 +58,9 @@ class CoinDetailFragment :
                 isDescriptionOpen = !isDescriptionOpen
             }
             priceChart.applyCustomStyle()
+            btnBack.setOnClickListener {
+                this@CoinDetailFragment
+            }
         }
     }
 
@@ -71,39 +75,29 @@ class CoinDetailFragment :
             coinName.text = coin.name
             coinSymbol.text = coin.symbol
             coinDescription.text = coin.description
-            txtPrice.text = activity?.resources?.getString(R.string.txt_price)?.format(coin.price)
-            txtMarketCap.text = " $${coin.marketCap}"
-            txtVolume24.text = " $${coin.volume24h}"
+            with(NumberFormat.getCurrencyInstance(Locale.US)){
+                txtPrice.text = format(coin.price)
+                txtMarketCap.text = format(coin.marketCap)
+                txtVolume24.text = format(coin.volume24h)
+            }
             arrayOf(txtLabelPrice, txtLabelDes).forEach { textView ->
                 textView.setTextColor(Color.parseColor(coin.color))
             }
-            root.background =  GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, getTriGradient(Color.parseColor(coin.color)))
-//            val entries = arrayListOf<Entry>().apply {
-//                var x = 0
-//                val interval = 1000
-//                coin.sparklines.forEach { sparkVal ->
-//                    add(Entry(x.toFloat(), sparkVal.toFloat()))
-//                    x += interval
-//                }
-//            }
-//            priceChart.apply {
-//                data = LineData(LineDataSet(entries, "Sparklines").applyCustomStyle())
-//                applyCustomStyle()
-//                invalidate()
-//            }
+            root.background = GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, getTriGradient(Color.parseColor(coin.color)))
         }
     }
 
     override fun onGetHistory(history: List<HistoryEntry<Double>>){
         val entries = arrayListOf<Entry>().apply {
-            var x = 0
-            history.forEach { (_, price) ->
-                add(Entry(x.toFloat(), price.toFloat()))
-                x += 1000
+            history.forEach { (timestamp, price) ->
+                add(Entry(timestamp.toFloat(), price.toFloat()))
             }
+            Collections.sort(this, EntryXComparator())
         }
         binding.priceChart.apply {
-            data = LineData(LineDataSet(entries, "Price").applyCustomStyle())
+            data = LineData(this@CoinDetailFragment.context?.let {
+                LineDataSet(entries, "Price").applyCustomStyle(it)
+            })
             invalidate()
         }
     }

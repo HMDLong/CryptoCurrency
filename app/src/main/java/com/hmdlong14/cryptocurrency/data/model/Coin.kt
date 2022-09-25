@@ -28,10 +28,12 @@ class Coin : Serializable {
             name = jsonObject.getString(CoinEntry.NAME)
             color = jsonObject.getString(CoinEntry.COLOR)
             iconUrl = jsonObject.getString(CoinEntry.ICON)
+            var cancelVote = 0
             marketCap = run {
                 try {
                     jsonObject.getString(CoinEntry.MARKET_CAP).toLong()
                 } catch (e : NumberFormatException) {
+                    cancelVote += 1
                     null
                 }
             }
@@ -39,6 +41,7 @@ class Coin : Serializable {
                 try {
                     jsonObject.getString(CoinEntry.PRICE).toDouble()
                 } catch (e : NumberFormatException) {
+                    cancelVote += 1
                     null
                 }
             }
@@ -46,6 +49,7 @@ class Coin : Serializable {
                 try {
                     jsonObject.getString(CoinEntry.VOLUME_24H).toLong()
                 } catch (e : NumberFormatException) {
+                    cancelVote += 1
                     null
                 }
             }
@@ -53,11 +57,14 @@ class Coin : Serializable {
                 try {
                     jsonObject.getString(CoinEntry.CHANGE).toDouble()
                 } catch (e : NumberFormatException) {
+                    cancelVote += 1
                     null
                 }
             }
             tier = jsonObject.getInt(CoinEntry.TIER)
             rank = jsonObject.getInt(CoinEntry.RANK)
+            if(cancelVote > 2)
+                throw Exception()
         }
 
         fun parseJsonToCoinWithDetail(jsonObject: JSONObject) =
